@@ -1,0 +1,12 @@
+
+//To use this we use #include <ctime> library
+//and we also use #pragma warning(disable : 4996)
+
+       time_t curr_time;
+        curr_time = time(NULL);
+        tm* a = localtime(&curr_time);
+        int ldate = a->tm_mday;
+        int lmonth = a->tm_mon;
+        int lhour = a->tm_hour;
+        int lmin = a->tm_min;
+        int lsec = a->tm_sec;
