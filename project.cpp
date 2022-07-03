@@ -1,20 +1,23 @@
 #include<iostream>
-using namespace std;
-#include <iostream>
+#include <ctime>
+#pragma warning(disable : 4996)
+#include<iomanip>
+
 using namespace std;
 
-class Node {
+
+class Node_Avl {
 public:
     string key;
-    Node* left;
-    Node* right;
+    Node_Avl* left;
+    Node_Avl* right;
     int height;
 };
 
 string max(string a, string b);
 
 // Calculate height
-int height(Node* N) {
+int height(Node_Avl* N) {
     if (N == NULL)
         return 0;
     return N->height;
@@ -25,8 +28,8 @@ string max(string a, string b) {
 }
 
 // New node creation
-Node* newNode(string key) {
-    Node* node = new Node();
+Node_Avl* newNode(string key) {
+    Node_Avl* node = new Node_Avl();
     node->key = key;
     node->left = NULL;
     node->right = NULL;
@@ -35,9 +38,9 @@ Node* newNode(string key) {
 }
 
 // Rotate right
-Node* rightRotate(Node* y) {
-    Node* x = y->left;
-    Node* T2 = x->right;
+Node_Avl* rightRotate(Node_Avl* y) {
+    Node_Avl* x = y->left;
+    Node_Avl* T2 = x->right;
     x->right = y;
     y->left = T2;
     y->height = max(height(y->left),
@@ -50,9 +53,9 @@ Node* rightRotate(Node* y) {
 }
 
 // Rotate left
-Node* leftRotate(Node* x) {
-    Node* y = x->right;
-    Node* T2 = y->left;
+Node_Avl* leftRotate(Node_Avl* x) {
+    Node_Avl* y = x->right;
+    Node_Avl* T2 = y->left;
     y->left = x;
     x->right = T2;
     x->height = max(height(x->left),
@@ -65,7 +68,7 @@ Node* leftRotate(Node* x) {
 }
 
 // Get the balance factor of each node
-int getBalanceFactor(Node* N) {
+int getBalanceFactor(Node_Avl* N) {
     if (N == NULL)
         return 0;
     return height(N->left) -
@@ -73,7 +76,7 @@ int getBalanceFactor(Node* N) {
 }
 
 // Insert a node
-Node* insertNode(Node* node, string key) {
+Node_Avl* insertNode(Node_Avl* node, string key) {
     // Find the correct postion and insert the node
     if (node == NULL)
         return (newNode(key));
@@ -111,15 +114,15 @@ Node* insertNode(Node* node, string key) {
 }
 
 // Node with minimum value
-Node* nodeWithMimumValue(Node* node) {
-    Node* current = node;
+Node_Avl* nodeWithMimumValue(Node_Avl* node) {
+    Node_Avl* current = node;
     while (current->left != NULL)
         current = current->left;
     return current;
 }
 
 // Delete a node
-Node* deleteNode(Node* root, string key) {
+Node_Avl* deleteNode(Node_Avl* root, string key) {
     // Find the node and delete it
     if (root == NULL)
         return root;
@@ -130,7 +133,7 @@ Node* deleteNode(Node* root, string key) {
     else {
         if ((root->left == NULL) ||
             (root->right == NULL)) {
-            Node* temp = root->left ? root->left : root->right;
+            Node_Avl* temp = root->left ? root->left : root->right;
             if (temp == NULL) {
                 temp = root;
                 root = NULL;
@@ -140,7 +143,7 @@ Node* deleteNode(Node* root, string key) {
             free(temp);
         }
         else {
-            Node* temp = nodeWithMimumValue(root->right);
+            Node_Avl* temp = nodeWithMimumValue(root->right);
             root->key = temp->key;
             root->right = deleteNode(root->right,
                 temp->key);
@@ -177,27 +180,608 @@ Node* deleteNode(Node* root, string key) {
 }
 
 // Print the tree
-void printTree(Node* root) {
+void printTree(Node_Avl* root) {
     if (root != nullptr) {
         printTree(root->left);
         cout << root->key << " , ";
         printTree(root->right);
     }
 }
+class Node
+{
+public:
+    float data;
+    Node* next;
+};
 
-int main() {
+template<class T>
+class node
+{
+private:
 
-    Node* root = NULL;
-    root = insertNode(root, "abdul");
-    root = insertNode(root, "arez");
-    root = insertNode(root, "basit");
-    root = insertNode(root, "kis");
-    root = insertNode(root, "mis");
-    root = insertNode(root, "chis");
-    root = insertNode(root,"ll");
-    root = insertNode(root, "y");
-    printTree(root);
-    root = deleteNode(root, "y");
-    cout << "\nAfter deleting " << endl;
-    printTree(root);
+    T  data;
+    node* nextnode;
+public:
+    node() {
+
+        this->data = 0;
+
+        this->nextnode = NULL;
+    }
+    node(T data) {
+
+        this->data = data;
+
+        this->nextnode = NULL;
+    }
+    void setdata(T marks) {
+        this->data = marks;
+    }
+    void setnextnode(node* nextnode) {
+        this->nextnode = nextnode;
+    }
+    T getdata() {
+        return this->data;
+    }
+    node* getnextnode() {
+        return this->nextnode;
+    }
+};
+template<class T>
+class LINKLIST
+{
+private:
+    node<T>* head;
+    node<T>* tail;
+public:
+    LINKLIST<T>()
+    {
+        head = NULL;
+        tail = NULL;
+    }
+    void enque(T data)
+    {
+
+        node< T>* t = new node<T>(data);
+        if (head == NULL)
+        {
+            head = t;
+            tail = t;
+        }
+        else
+        {
+            tail->setnextnode(t);
+            tail = t;
+
+        }
+
+
+    }
+    void display()
+    {
+        if (head == NULL)
+        {
+            cout << "List is empty" << endl;
+        }
+        else
+        {
+            node<T>* temp = head;
+            while (temp != NULL)
+            {
+                cout << temp->getdata() << endl;
+                temp = temp->getnextnode();
+            }
+        }
+    }
+    void deleteFromStart()
+    {
+        if (head == NULL)
+        {
+            cout << "List is empty" << endl;
+        }
+        else
+        {
+            node<T>* temp = head;
+
+            if (head == tail)
+            {
+                head = tail = NULL;
+                delete temp;
+            }
+            else
+            {
+                head = head->getnextnode();
+                delete temp;
+            }
+        }
+    }
+
+
+    void deleteData(T data)
+    {
+        if (head == NULL)
+        {
+            cout << "List is empty" << endl;
+        }
+        else
+        {
+            node<T>* temp = head;
+
+            if (head->getdata() == data)
+            {
+                deleteFromStart();
+            }
+            else if (tail->getdata() == data)
+            {
+                deleteFromEnd();
+            }
+            else
+            {
+                node<T>* prev = head;
+                node<T>* temp = prev->getnextnode();
+
+                bool found = false;
+
+                while (temp->getnextnode() != NULL)
+                {
+                    if (temp->getdata() == data)
+                    {
+                        prev->setnextnode(temp->getnextnode());
+                        delete temp;
+                        found = true;
+                        break;
+                    }
+
+                    prev = temp;
+                    temp = temp->getnextnode();
+                }
+
+                if (found == false)
+                {
+                    cout << "Data not found" << endl;
+                }
+                else
+                {
+                    cout << "Data deleted successfully" << endl;
+                }
+            }
+        }
+    }
+
+
+
+    void deleteFromEnd()
+    {
+        if (head == NULL)
+        {
+            cout << "List is empty" << endl;
+        }
+        else
+        {
+            node<T>* temp = head;
+
+            if (head == tail)
+            {
+                head = tail = NULL;
+                delete temp;
+            }
+            else
+            {
+                while (temp->getnextnode() != tail)
+                {
+                    temp = temp->getnextnode();
+                }
+                tail = temp;
+                temp = temp->getnextnode();
+                delete temp;
+                tail->setnextnode(NULL);
+            }
+        }
+    }
+    node<T>* getHead() {
+        return head;
+    }
+    void update_element(T d, T update_ele)
+    {
+        int count = 0;
+
+        node<T>* temp = head;
+        while (temp != NULL) // Start traversing from head node
+        {
+            if (temp->getdata() == d)
+            {
+
+                temp->setdata(update_ele);// change the element in the list
+            }
+            else
+            {
+                count = count + 1;
+                temp = temp->getnext();
+            }
+        }
+    }
+    void Contactdelet(string n)
+    {
+        if (head == NULL)
+        {
+            cout << "List is empty" << endl;
+        }
+        else
+        {
+            node<T>* temp = head;
+
+            if (head->getdata().name == n || head->getdata().cell_phone == n)
+            {
+                deleteFromStart();
+            }
+            else if (tail->getdata().name == n || tail->getdata().cell_phone == n)
+            {
+                deleteFromEnd();
+            }
+            else
+            {
+                node<T>* prev = head;
+                node<T>* temp = prev->getnextnode();
+
+                bool found = false;
+
+                while (temp->getnextnode() != NULL)
+                {
+                    if (temp->getdata().name == n || temp->getdata().cell_phone == n)
+                    {
+                        prev->setnextnode(temp->getnextnode());
+                        delete temp;
+                        found = true;
+                        break;
+                    }
+
+                    prev = temp;
+                    temp = temp->getnextnode();
+                }
+
+                if (found == false)
+                {
+                    cout << "Data not found" << endl;
+                }
+                else
+                {
+                    cout << "Data deleted successfully" << endl;
+                }
+            }
+        }
+    }
+    void eventprint()
+    {
+        if (head == NULL)
+        {
+            cout << "List is empty" << endl;
+        }
+        else
+        {
+
+            node<T>* temp = head;
+            while (temp != NULL)
+            {
+
+                cout << temp->getdata().event_name << "   ";
+                cout << temp->getdata().date << " ";
+                cout << temp->getdata().month << " ";
+                cout << temp->getdata().year << endl;
+
+                temp = temp->getnextnode();
+            }
+        }
+    }
+    T search(string n, bool& check)
+    {
+        if (head == NULL)
+        {
+            cout << "List is empty" << endl;
+        }
+        else
+        {
+
+            node<T>* temp = head;
+            while (temp != NULL)
+            {
+
+                if (temp->getdata().name == n || temp->getdata().cell_phone == n) {
+                    check = true;
+                    return temp->getdata();
+                }
+                temp = temp->getnextnode();
+            }
+        }
+        check = false;
+        return head->getdata();
+
+    }
+
+
+};
+
+
+class Time
+{
+public:
+    int hour;
+    int minute;
+    int second;
+
+
+    Time(int h = 0, int m = 0, int s = 0);
+
+    void setTime(int h, int m, int s);
+
+    void print();
+
+    bool equals(Time);
+};
+
+Time::Time(int h, int m, int s)
+{
+    hour = h;
+    minute = m;
+    second = s;
+}
+
+void Time::setTime(int h, int m, int s)
+{
+    hour = h;
+    minute = m;
+    second = s;
+}
+
+void Time::print()
+{
+    cout << setw(2) << setfill('0') << hour << ":"
+        << setw(2) << setfill('0') << minute << ":"
+        << setw(2) << setfill('0') << second << "\n";
+}
+
+bool Time::equals(Time otherTime)
+{
+    if (hour == otherTime.hour &&
+        minute == otherTime.minute &&
+        second == otherTime.second)
+        return true;
+    else
+        return false;
+}
+class event {
+public:
+    string event_name;
+    int month;
+    int date;
+    Time b;
+    void setTIME(Time a) {
+        b.setTime(a.hour, a.minute,a.second);
+    }
+    void seteventname(string ev) {
+        this->event_name = ev;
+    }
+    void setmon(int m) {
+        this->month = m;
+    }
+    void setdate(int d) {
+        this->date = d;
+    }
+
+    void ltime() {
+        time_t curr_time;
+        curr_time = time(NULL);
+        tm* a = localtime(&curr_time);
+        int ldate = a->tm_mday;
+        int lmonth = a->tm_mon;
+        int lhour = a->tm_hour;
+        int lmin = a->tm_min;
+        int lsec = a->tm_sec;
+        cout << "LOCAL DATE IS : \n";
+        cout << ldate << "/" << lmonth << "/2022\n";
+        cout << "LOCAL TIME IS : " << lhour << " " << lmin << "mins\n";
+        
+    }
+  
+
+
+};
+class students {
+    LINKLIST <string> timeline;
+    LINKLIST <string >friends;
+    LINKLIST < event> events;
+public:
+    void Settimeline(string data) {
+        timeline.enque(data);
+    }
+    void setfriends(string data) {
+        friends.enque(data);
+    }
+    void setevents(event e) {
+        events.enque(e);
+    }
+    void getfriends() {
+        friends.display();
+    }
+    void getevents() {
+        //  events.display();
+    }
+    void gettimeline() {
+        timeline.display();
+    }
+};
+
+class PriorityQ {
+public:
+    int H[50];
+    int size = -1;
+
+    // Function to return the index of the
+    // parent node of a given node
+    int parent(int i)
+    {
+
+        return (i - 1) / 2;
+    }
+
+    // Function to return the index of the
+    // left child of the given node
+    int leftChild(int i)
+    {
+
+        return ((2 * i) + 1);
+    }
+
+    // Function to return the index of the
+    // right child of the given node
+    int rightChild(int i)
+    {
+
+        return ((2 * i) + 2);
+    }
+
+    // Function to shift up the node in order
+    // to maintain the heap property
+    void shiftUp(int i)
+    {
+        while (i > 0 && H[parent(i)] < H[i]) {
+
+            // Swap parent and current node
+            swap(H[parent(i)], H[i]);
+
+            // Update i to parent of i
+            i = parent(i);
+        }
+    }
+
+    // Function to shift down the node in
+    // order to maintain the heap property
+    void shiftDown(int i)
+    {
+        int maxIndex = i;
+
+        // Left Child
+        int l = leftChild(i);
+
+        if (l <= size && H[l] > H[maxIndex]) {
+            maxIndex = l;
+        }
+
+        // Right Child
+        int r = rightChild(i);
+
+        if (r <= size && H[r] > H[maxIndex]) {
+            maxIndex = r;
+        }
+
+        // If i not same as maxIndex
+        if (i != maxIndex) {
+            swap(H[i], H[maxIndex]);
+            shiftDown(maxIndex);
+        }
+    }
+
+    // Function to insert a new element
+    // in the Binary Heap
+    void insert(int p)
+    {
+        size = size + 1;
+        H[size] = p;
+
+        // Shift Up to maintain heap property
+        shiftUp(size);
+    }
+
+    // Function to extract the element with
+    // maximum priority
+    int extractMax()
+    {
+        int result = H[0];
+
+        // Replace the value at the root
+        // with the last leaf
+        H[0] = H[size];
+        size = size - 1;
+
+        // Shift down the replaced element
+        // to maintain the heap property
+        shiftDown(0);
+        return result;
+    }
+
+    // Function to change the priority
+    // of an element
+    void changePriority(int i, int p)
+    {
+        int oldp = H[i];
+        H[i] = p;
+
+        if (p > oldp) {
+            shiftUp(i);
+        }
+        else {
+            shiftDown(i);
+        }
+    }
+
+    // Function to get value of the current
+    // maximum element
+    int getMax()
+    {
+
+        return H[0];
+    }
+
+    // Function to remove the element
+    // located at given index
+    void remove(int i)
+    {
+        H[i] = getMax() + 1;
+
+        // Shift the node to the root
+        // of the heap
+        shiftUp(i);
+
+        // Extract the node
+        extractMax();
+    }
+};
+
+int main(){
+    event a;
+    event b;
+    event c;
+    event d;
+    a.setdate(12);
+    b.setdate(4);
+    c.setdate(1);
+    d.setdate(9);
+
+    PriorityQ q;
+    q.insert(a.date);
+    q.insert(b.date);
+    q.insert(c.date);
+    q.insert(d.date);
+   
+    
+    int i = 0;
+
+    // Priority queue before extracting max
+    cout << "Priority Queue : ";
+    while (i <= q.size) {
+        cout << q.H[i] << " ";
+        i++;
+    }
+
+    cout << "\n";
+
+    // Node with maximum priority
+    cout << "Node with maximum priority : "
+        << q.extractMax() << "\n";
+    q.remove(45);
+    cout << "Node with maximum priority : "
+        << q.extractMax() << "\n";
+
+
+    return 0;
+
 }
